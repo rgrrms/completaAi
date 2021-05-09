@@ -1,0 +1,11 @@
+.timelineContainer {
+
+    justify-content: center;
+    align-items: center;
+}
+
+.timelineContainer .timelineTitle {
+    text-align: center;
+    padding: 1rem;
+    font-size: 2rem;
+}

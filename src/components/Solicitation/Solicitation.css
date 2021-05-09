@@ -1,0 +1,23 @@
+.solicitationContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.solicitationContainer .solicitation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.solicitationContainer .lineVertical {
+    width: 0.4rem;
+    height: 20rem;
+    background-color: black;
+    border-radius: 1rem;
+    margin: 0 2rem;
+}
+
+.solicitationContainer .solicitation input {
+    margin: .5rem;
+}

@@ -1,0 +1,25 @@
+.formRegister {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.formRegister label {
+    color: beige;
+    font-weight: bold;
+}
+
+.formRegister label,
+.formRegister button,
+.formRegister input {
+    margin: 0.3rem;
+    border: none;
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+}
+
+.formRegister button {
+    width: 47.5%;
+    height: 1.5rem;
+    background-color: white;
+}

@@ -1,0 +1,16 @@
+.homeContainer {
+    /*height: 100vh;*/
+    /*background-size: 2000px 1125px;*/
+    display: flex;
+    flex-direction: column;
+}
+
+.homeContainer .cards {
+    display: flex;
+}
+
+.homeContainer .cards .cardLogin {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem;
+}

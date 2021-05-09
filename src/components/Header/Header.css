@@ -1,0 +1,25 @@
+.line {
+    background: #Fa3535;
+    min-width: 100%;
+    min-height: 40px;
+}
+
+.lineImages {
+    display: flex;
+    align-items: center;
+}
+
+.lineImages .logotipo {
+    height: 10rem;
+}
+
+.lineImages .logoMarca {
+    margin: 1rem 20rem 1rem 1rem;
+    height: 8rem;
+}
+
+.lineImages .titleHeader {
+    color: #Fa3535;
+    font-size: 3rem;
+    font-family: "Ubuntu Condensed";
+}

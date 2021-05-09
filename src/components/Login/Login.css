@@ -1,0 +1,30 @@
+.formLogin {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.formLogin button,
+.formLogin input {
+    margin: 0.3rem;
+    border: none;
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+}
+
+.formLogin button {
+    width: 47.5%;
+    height: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.formLogin .adminLogin {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 0.5rem;
+    color: white;
+}
