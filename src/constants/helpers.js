@@ -13,4 +13,5 @@ export const clearStorage = () => {
   localStorage.removeItem(STORAGE_KEYS.USER);
   localStorage.removeItem(STORAGE_KEYS.HAS_PERMISSION);
   localStorage.removeItem(STORAGE_KEYS.AUTH);
+  localStorage.removeItem(STORAGE_KEYS.USER_ID);
 };

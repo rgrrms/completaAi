@@ -1,0 +1,35 @@
+.modal {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal .containerModal {
+    background-color: white;
+    width: 50%;
+    height: 35%;
+    border-radius: 1rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal .containerModal button {
+    margin: 2.5rem;
+    width: 5rem;
+    height: 2rem;
+}
+
+.modal .containerModal .buttonsModal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

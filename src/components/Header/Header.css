@@ -23,3 +23,14 @@
     font-size: 3rem;
     font-family: "Ubuntu Condensed";
 }
+
+.divExitButton {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+}
+
+.exitButton {
+
+
+}

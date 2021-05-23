@@ -3,52 +3,63 @@ import "./History.css"
 import api from "../../services/service";
 import {getFromStorage} from "../../constants/helpers";
 import {STORAGE_KEYS} from "../../constants/constantes";
-import {IServices} from "../../types/services";
+import {IServices} from "../../types/oreder";
 
-const History = () => {
+interface IUpdate {
+  updateList: boolean;
+  setUpdateList: (e: boolean) => void;
+  setIsOpenModal: (e: any) => void;
+  setValueModal: (e: any) => void;
+}
+
+const History: React.FC<IUpdate> = ({updateList, setUpdateList, setIsOpenModal, setValueModal}) => {
   const [services, setServices] = useState<IServices[]>();
-  const [cars, setCars] = useState();
-  const [address, setAddress] = useState();
 
   useEffect(() => {
-    api.get("order", { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
-      console.log(resp.data.carros[0])
-      console.log(resp.data.servicos[0])
-      console.log(resp.data.enderecos[0])
-      setCars(resp.data.carros[0]);
-      setAddress(resp.data.enderecos[0]);
-      setServices(resp.data.servicos[0]);
-    });
-  }, []);
+    if (updateList === true) {
+      api.get("order", { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+        console.log(resp.data)
+        setServices(resp.data);
+      });
+      setUpdateList(false);
+    }
+  }, [updateList]);
+
+  const onHandleModalOpen = (value: string) => {
+    setValueModal(value);
+    setIsOpenModal(true)
+  }
 
   return (
     <>
       <table className="historyTable">
         <thead>
-        <tr>
-          <th>Status</th>
-          <th>Rua</th>
-          <th>Numero</th>
-          <th>Placa</th>
-        </tr>
+          <tr>
+            <th>Status</th>
+            <th>Litros</th>
+            <th>Valor</th>
+            <th>Rua</th>
+            <th>Numero</th>
+            <th>Modelo</th>
+            <th>Placa</th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-        <tr>
           {services?.map(service => {
             return (
-              <td>service.status</td>
+              <tr key={service._id}>
+                <td>{service.status}</td>
+                <td>{service.amountFuel}</td>
+                <td>R$ {service.payment}</td>
+                <td>{service.address.street}</td>
+                <td>{service.address.number}</td>
+                <td>{service.car.carModel}</td>
+                <td>{service.car.license}</td>
+                {service.status === "Aguardando Pagamento" ? <td><button onClick={() => onHandleModalOpen(service.payment)}>Pagar</button></td> : null}
+              </tr>
             )
           })}
-
-          <td>Smith</td>
-          <td>50</td>
-          <td>ABC-DES</td>
-
-          <td>Concluido</td>
-          <td>Jackson</td>
-          <td>94</td>
-          <td>ABC-123</td>
-        </tr>
         </tbody>
       </table>
     </>

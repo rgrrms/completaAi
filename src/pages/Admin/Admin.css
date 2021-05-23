@@ -1,0 +1,9 @@
+.alterTable {
+    margin: 1rem;
+    transform: translateY(-3.25rem);
+}
+
+.adminContainerTable {
+    display: flex;
+    justify-content: center;
+}

@@ -28,8 +28,15 @@ const Login: React.FC<IRegister> = ({onHandleAction}) => {
         setOnStorage(STORAGE_KEYS.TOKEN, resp.data.token);
         setOnStorage(STORAGE_KEYS.USER, email);
         setOnStorage(STORAGE_KEYS.AUTH, resp.data.auth);
-        setOnStorage(STORAGE_KEYS.USER_ID, resp.data.userId);
-        document.location.href = '/';
+        if (checkedAdmin) {
+          setOnStorage(STORAGE_KEYS.HAS_PERMISSION, 2);
+          document.location.href = '/admin'
+        }
+        else {
+          setOnStorage(STORAGE_KEYS.HAS_PERMISSION, 1);
+          setOnStorage(STORAGE_KEYS.USER_ID, resp.data.userId);
+          document.location.href = '/';
+        }
       });
     }
   }

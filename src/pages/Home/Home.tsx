@@ -7,7 +7,7 @@ import Header from "../../components/Header/Header";
 const Home = () => {
   return (
     <div className="homeContainer">
-      <Header />
+      <Header exit={false}/>
       <div className="cards">
         <div className="cardLogin">
           <Actions />

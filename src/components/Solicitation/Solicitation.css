@@ -6,6 +6,12 @@
 
 .solicitationContainer .solicitation {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.solicitationContainer .solicitation div {
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
