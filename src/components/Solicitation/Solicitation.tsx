@@ -5,17 +5,22 @@ import api from "../../services/service";
 import {getFromStorage} from "../../constants/helpers";
 import {STORAGE_KEYS} from "../../constants/constantes";
 import ModalPayment from "../Modal/Modal";
+import {cepMask, plateMercosul} from "../../constants/utils/maks";
+import axios from "axios";
+import {IStateAndCity} from "../../types/stateAndCity";
+import {typesFuel} from "../../constants/utils/typesFuel";
+import {typesServices} from "../../constants/utils/typesServices";
 
 const Solicitation = () => {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState<number>();
   const [complement, setComplement] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [service, setService] = useState('Abastecer');
+  const [service, setService] = useState('');
   const [fuel, setFuel] = useState('');
-  const [liters, setLiters] = useState('');
+  const [liters, setLiters] = useState<number>();
   const [license, setLicense] = useState('');
   const [color, setColor] = useState('');
   const [carModel, setCarModel] = useState('');
@@ -25,6 +30,12 @@ const Solicitation = () => {
   const [updateList, setUpdateList] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
+  const [listState, setListState] = useState<string[]>();
+  const [listCity, setListCity] = useState<string[]>();
+
+  const [listTypeFuel, setListTypeFuel] = useState<string[]>();
+  const [listTypeServices, setListTypeServices] = useState<string[]>();
+
   useEffect(() => {
     api.get(`car/${getFromStorage(STORAGE_KEYS.USER_ID)}`).then(resp => {
       console.log(resp.data)
@@ -32,7 +43,28 @@ const Solicitation = () => {
       setColor(resp.data.color);
       setCarModel(resp.data.carModel);
     });
+
+    axios.get<IStateAndCity[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
+      const stateNames = response.data.map(uf => uf.sigla + " - " + uf.nome).sort((a, b) => a.localeCompare(b));
+      setListState(stateNames);
+    });
+
+    setListTypeServices(typesServices.sort((a, b) => a.localeCompare(b)));
+    setListTypeFuel(typesFuel.sort((a, b) => a.localeCompare(b)));
+
   }, []);
+
+  useEffect(() =>{
+    if (state === '0'){
+      return;
+    }
+    const uf = state.split("-")[0].trim();
+    console.log(uf);
+    axios.get<IStateAndCity[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`).then(response => {
+      const cityNames = response.data.map(city => city.nome).sort((a, b) => a.localeCompare(b));
+      setListCity(cityNames);
+    });
+  }, [state]);
 
   const onHandleCreateRequest = (e: any) => {
     e.preventDefault();
@@ -58,7 +90,7 @@ const Solicitation = () => {
         }
       };
       setValueModal(Number(liters) * 5);
-      api.post("createOrder", data, { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }})
+      api.post("createOrder", data)
         .then(resp => {
           console.log(resp);
           console.log(resp.status);
@@ -71,8 +103,9 @@ const Solicitation = () => {
             setNumber(0);
             setComplement('');
             setZipCode('');
+            setService('');
             setFuel('');
-            setLiters('');
+            setLiters(0);
             setCarModel('');
             setLicense('');
             setColor('');
@@ -88,22 +121,42 @@ const Solicitation = () => {
         <div className="solicitation">
           <div>
             <label>Endereço</label>
-            <input placeholder="Estado" value={state} onChange={(e) => setState(e.target.value)}/>
-            <input placeholder="Cidade" value={city} onChange={(e) => setCity(e.target.value)}/>
+            <select name="state" value={state} onChange={(e) => setState(e.target.value)}>
+              <option value="0">Selecione o estado</option>
+              {listState?.map(uf => (
+                <option key={uf} value={uf}>{uf}</option>
+              ))}
+            </select>
+            <select name="city" value={city} onChange={(e) => setCity(e.target.value)}>
+              <option value="0">Selecione uma cidade</option>
+              {listCity?.map(city => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
             <input placeholder="Rua" value={street} onChange={(e) => setStreet(e.target.value)}/>
             <input type="number" placeholder="Número" value={number} onChange={(e) => setNumber(Number(e.target.value))}/>
             <input placeholder="Complemento" value={complement} onChange={(e) => setComplement(e.target.value)}/>
-            <input placeholder="CEP" value={zipCode} onChange={(e) => setZipCode(e.target.value)}/>
+            <input placeholder="CEP" value={zipCode} onChange={(e) => setZipCode(cepMask(e.target.value))}/>
             <button onClick={onHandleCreateRequest}>Pagar</button>
           </div>
           <div>
             <label>Serviço</label>
-            <input placeholder="Serviço" value={service} disabled={true}/>
-            <input placeholder="Combustível" value={fuel} onChange={(e) => setFuel(e.target.value)}/>
-            <input placeholder="Litros" value={liters} onChange={(e) => setLiters(e.target.value)}/>
+            <select name="service" value={service} onChange={(e) => setService(e.target.value)}>
+              <option value="0">Selecione o serviço</option>
+              {listTypeServices?.map(service => (
+                <option key={service} value={service}>{service}</option>
+              ))}
+            </select>
+            <select name="fuel" value={fuel} onChange={(e) => setFuel(e.target.value)}>
+              <option value="0">Selecione o combustível</option>
+              {listTypeFuel?.map(fuel => (
+                <option key={fuel} value={fuel}>{fuel}</option>
+              ))}
+            </select>
+            <input type="number" placeholder="Litros" value={liters} onChange={(e) => setLiters(Number(e.target.value))}/>
             <label>Carro</label>
             <input placeholder="Modelo" value={carModel} onChange={(e) => setCarModel(e.target.value)}/>
-            <input placeholder="Placa" value={license} onChange={(e) => setLicense(e.target.value)}/>
+            <input placeholder="Placa" value={license} onChange={(e) => setLicense(plateMercosul(e.target.value))}/>
             <input placeholder="Cor" value={color} onChange={(e) => setColor(e.target.value)}/>
           </div>
         </div>

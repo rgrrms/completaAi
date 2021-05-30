@@ -17,13 +17,13 @@ const History: React.FC<IUpdate> = ({updateList, setUpdateList, setIsOpenModal, 
 
   useEffect(() => {
     if (updateList === true) {
-      api.get("order", { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+      api.get("order").then(resp => {
         console.log(resp.data)
         setServices(resp.data);
       });
       setUpdateList(false);
     }
-  }, [updateList]);
+  }, [updateList, setUpdateList]);
 
   const onHandleModalOpen = (value: string) => {
     setValueModal(value);
@@ -56,7 +56,7 @@ const History: React.FC<IUpdate> = ({updateList, setUpdateList, setIsOpenModal, 
                 <td>{service.address.number}</td>
                 <td>{service.car.carModel}</td>
                 <td>{service.car.license}</td>
-                {service.status === "Aguardando Pagamento" ? <td><button onClick={() => onHandleModalOpen(service.payment)}>Pagar</button></td> : null}
+                {service.status === "Aguardando Pagamento" ? <td><button className="buttonPayList" onClick={() => onHandleModalOpen(service.payment)}>Pagar</button></td> : null}
               </tr>
             )
           })}

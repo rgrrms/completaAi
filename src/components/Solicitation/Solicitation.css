@@ -24,6 +24,11 @@
     margin: 0 2rem;
 }
 
-.solicitationContainer .solicitation input {
+.solicitationContainer .solicitation input,
+.solicitationContainer .solicitation select {
     margin: .5rem;
+}
+
+.solicitationContainer .solicitation select {
+    width: 13.4rem;
 }

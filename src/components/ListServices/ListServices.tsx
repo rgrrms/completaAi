@@ -4,6 +4,7 @@ import {getFromStorage} from "../../constants/helpers";
 import {STORAGE_KEYS} from "../../constants/constantes";
 import {IServices} from "../../types/oreder";
 import ModalPayment from "../Modal/Modal";
+import "./ListServices.css";
 
 const ListServices = () => {
   const [services, setServices] = useState<IServices[]>();
@@ -16,7 +17,7 @@ const ListServices = () => {
 
   useEffect(() => {
     if (updateList) {
-      api.get('allOrders', { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+      api.get('allOrders').then(resp => {
         console.log(resp.data)
         setServices(resp.data);
       });
@@ -37,7 +38,7 @@ const ListServices = () => {
 
   const onHandlePayment = () => {
     let status = statusToUpdate === "Aguardando Pagamento" ? "Em atendimento" : "Finalizado";
-    api.put(`updateOrder/${idSelected}`, {status: status},{ headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+    api.put(`updateOrder/${idSelected}`, {status: status}).then(resp => {
       console.log(resp.data)
       if (resp.status === 200) {
         alert("Status atualizado com sucesso!")
@@ -48,7 +49,7 @@ const ListServices = () => {
   }
 
   const onHandleDelete = () => {
-    api.delete(`deleteOrder/${idSelected}`, { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+    api.delete(`deleteOrder/${idSelected}`).then(resp => {
       console.log(resp.data)
       if (resp.status === 200) {
         alert("Solicitação excluida com sucesso!")
@@ -89,8 +90,8 @@ const ListServices = () => {
               <td>{service.address.number}</td>
               <td>{service.car.license}</td>
               <td>{service.idUser}</td>
-              <td><button onClick={() => onUpdateService(service._id, service.status)}>Paga</button></td>
-              <td><button onClick={() => onAskDelete(service._id)}>Exlcuir</button></td>
+              <td><button className="buttonListServiceAction" onClick={() => onUpdateService(service._id, service.status)}>Paga</button></td>
+              <td><button className="buttonListServiceAction" onClick={() => onAskDelete(service._id)}>Exlcuir</button></td>
             </tr>
           )
         })}

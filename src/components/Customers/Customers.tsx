@@ -4,6 +4,7 @@ import {getFromStorage} from "../../constants/helpers";
 import {STORAGE_KEYS} from "../../constants/constantes";
 import {ICustomers} from "../../types/customers";
 import ModalPayment from "../Modal/Modal";
+import "./Customers.css";
 
 const Customers = () => {
   const [idDelete, setIdDelete] = useState('');
@@ -14,7 +15,7 @@ const Customers = () => {
 
   useEffect(() => {
     if (updateList) {
-      api.get('/listAllUsers', { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+      api.get('/listAllUsers').then(resp => {
         console.log(resp.data)
         setCustomers(resp.data);
       });
@@ -28,7 +29,7 @@ const Customers = () => {
   }
 
   const onHandleDelete = () => {
-    api.delete(`deleteUser/${idDelete}`, { headers: { "x-access-token": getFromStorage(STORAGE_KEYS.TOKEN) }}).then(resp => {
+    api.delete(`deleteUser/${idDelete}`).then(resp => {
       console.log(resp.data)
       if (resp.status === 200) {
         alert("Usuário excluido com sucesso!")
@@ -60,7 +61,7 @@ const Customers = () => {
               <td>{customer.cpf}</td>
               <td>{customer.email}</td>
               <td>{customer.cell}</td>
-              <td><button onClick={() => onAskDelete(customer._id)}>Exlcuir</button></td>
+              <td><button className="buttonCustomersAction" onClick={() => onAskDelete(customer._id)}>Exlcuir</button></td>
             </tr>
           )
         })}

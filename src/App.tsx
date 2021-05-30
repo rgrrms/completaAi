@@ -7,19 +7,19 @@ import axios from "axios";
 
 function App() {
   useEffect(() => {
-      document.oncontextmenu = function () {
-        return false;
-      };
+    document.oncontextmenu = function () {
+      return false;
+    };
 
-      document.onkeydown = function (event) {
-        return event.key !== 'F12';
-      };
+    document.onkeydown = function (event) {
+      return event.key !== 'F12';
+    };
 
     api.interceptors.request.use(
       async (config) => {
-        if (!config.url?.endsWith('social')) {
+        if (!config.url?.endsWith('login') && !config.url?.endsWith('loginAdmin')) {
           const userToken = await getFromStorage(STORAGE_KEYS.TOKEN);
-          config.headers.Authorization = `Bearer ${userToken}`;
+          config.headers["x-access-token"] = userToken;
         }
 
         return config;
@@ -34,7 +34,7 @@ function App() {
         return response;
       },
       (error) => {
-        if (error.response?.status === 401) {
+        if ((error.response?.status === 401) && (!error.response?.config.url?.endsWith('login') && !error.response?.config.url?.endsWith('loginAdmin'))) {
           clearStorage();
 
           document.location.href = '/auth';
@@ -57,3 +57,5 @@ function App() {
 }
 
 export default App;
+
+//ssh -R 80:localhost:3000 localhost.run

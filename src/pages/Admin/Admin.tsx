@@ -16,7 +16,12 @@ const Admin = () => {
       <Header exit={true}/>
       <button className="alterTable" onClick={onHandleAlterTable} >{whichList === "CUSTOMERS" ? "Solicitações" : "Clientes"}</button>
       <div className="adminContainerTable">
-        {whichList === "CUSTOMERS" ? <Customers /> : <ListServices />}
+        <div>
+          {whichList === "CUSTOMERS" ? <p className="titleAdmin" >Clientes</p> : <p className="titleAdmin" >Solicitações</p>}
+        </div>
+        <div>
+          {whichList === "CUSTOMERS" ? <Customers /> : <ListServices />}
+        </div>
       </div>
     </>
   )
